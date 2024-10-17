@@ -1,16 +1,74 @@
-        <html>
-        <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0" />
-        <title>Crio Feed</title>
-        <meta name="description" content="Crio Feed Website" />
-        <link rel="stylesheet" href="resources/css/index.css">
-        </head>
-
-        <body>
-
-        <div class="h1">Write your code in this file</div>
-        <script src="resources/data/magazines.js"></script>
-        <script src="resources/js/index.js"></script>
-        </body>
-        </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0" />
+    <title>Crio Feed</title>
+    <meta name="description" content="Crio Feed Website" />
+    <link rel="stylesheet" href="resources/css/index.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Crio News Feed</a>
+    </nav>
+    <div class="container">
+        <div class="accordion" id="newsAccordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Topic 1
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#newsAccordion">
+                    <div class="card-body">
+                        <div id="carouselExampleIndicators1" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner" id="carouselInner1">
+                                <!-- Cards for news articles will be inserted here dynamically -->
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators1" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators1" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat similar blocks for Topic 2 and Topic 3 -->
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="resources/data/magazines.js"></script>
+    <script src="resources/js/index.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('https://api.rss2json.com/v1/api.json?rss_url=https://flipboard.com/topic/indiansports.rss')
+                .then(response => response.json())
+                .then(data => {
+                    let articles = data.items;
+                    let carouselInner1 = document.getElementById('carouselInner1');
+                    articles.forEach((article, index) => {
+                        let activeClass = index === 0 ? 'active' : '';
+                        let carouselItem = `
+                            <div class="carousel-item ${activeClass}">
+                                <img src="${article.enclosure.link}" class="d-block w-100" alt="${article.title}">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>${article.title}</h5>
+                                    <p>${article.description}</p>
+                                </div>
+                            </div>`;
+                        carouselInner1.insertAdjacentHTML('beforeend', carouselItem);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>
